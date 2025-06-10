@@ -1,12 +1,12 @@
 ---
 import Layout from "@layouts/Layout.astro";
 import Nav from "@components/Nav.astro";
-import Details from "@/layouts/Details.astro";
+import Details from "@/components/Details.astro";
 
 const frontmatter = {
-  title: "Homepage",
+  title: "Homepage | Services Scroll Interaction",
   description:
-    "Welcome to our homepage! Discover our services and how we can help you.",
+    "Welcome to Services Scroll Interaction! Explore our front-end and back-end services with a unique scroll-based interaction that highlights our offerings dynamically.",
 };
 
 const mainContent = {
@@ -93,32 +93,59 @@ const mainContent = {
     ],
   },
 };
-
-// Calculate the distance from the top of the page to the sticky first column (nav height + section padding)
-const distanceFromTop = `${65 + 80}px`;
 ---
 
 <Layout title={frontmatter.title} description={frontmatter.description}>
   <Nav />
   <!-- Two columns: First one has title/pagination and is sticky -->
   <main class="grow container py-20 grid grid-cols-1 tablet:grid-cols-2 gap-10">
+    <!-- 145px is the distance from the top of the page to the sticky first column (nav height + section padding) -->
     <div
-      class={`sticky top-0 h-[calc(100vh_-_${distanceFromTop})] pt-[${distanceFromTop}] -mt-[${distanceFromTop}] flex flex-col justify-between`}
+      class="sticky top-0 h-[calc(100vh_-_145px)] pt-[145px] -mt-[145px] flex flex-col justify-between"
     >
       <h1
-        class="font-extrabold uppercase text-7xl laptop:text-9xl laptop:leading-28"
+        class="font-extrabold uppercase text-7xl laptop:text-9xl laptop:leading-28 flex flex-col gap-4"
+        aria-label="Front End and Back End Services"
       >
-        {
-          Object.entries(mainContent).map(([key, content]) => (
-            <span id={`topic-header--${key}`}>{content.topicPrefix}</span>
-          ))
-        }
-        <br />End
+        <!-- Will add "animate-swap" class dynamically based on intersection observer -->
+        <div class="text-window relative overflow-hidden h-[120px]">
+          {
+            Object.entries(mainContent).map(([key, content], index) => (
+              <span
+                id={`topic-header--${key}`}
+                class={`absolute bottom-0 left-0 ${index === 0 ? "old-text" : "new-text"}`}
+              >
+                {[...content.topicPrefix].map(
+                  (char: string, charIndex: number) => (
+                    <span style={{ "--index": charIndex }}>{char}</span>
+                  ),
+                )}
+              </span>
+            ))
+          }
+        </div>
+        End
       </h1>
 
-      <p class="font-extrabold text-9xl leading-28">
-        <span id="active-page">01</span>
-      </p>
+      <div
+        class="page-number-window relative overflow-hidden h-[120px] font-extrabold uppercase text-7xl laptop:text-9xl laptop:leading-28"
+      >
+        {
+          Object.entries(mainContent).map(([key], index) => {
+            const pageNum = (index + 1).toString().padStart(2, "0");
+            return (
+              <span
+                id={`page-number--${key}`}
+                class={`absolute bottom-0 left-0 ${index === 0 ? "old-text" : "new-text"}`}
+              >
+                {[...pageNum].map((char: string, charIndex: number) => (
+                  <span style={{ "--index": charIndex }}>{char}</span>
+                ))}
+              </span>
+            );
+          })
+        }
+      </div>
     </div>
 
     <!-- Second column: Content for the page -->
@@ -147,3 +174,135 @@ const distanceFromTop = `${65 + 80}px`;
     </div>
   </main>
 </Layout>
+
+<script>
+  // On scroll, if the "#topic--<name>" element is in view, update the active page number and add the animate-swap class to "text-window"
+  const topics = document.querySelectorAll("[id^='topic--']");
+  const textWindow = document.querySelector(".text-window");
+  const pageNumberWindow = document.querySelector(".page-number-window");
+
+  const handleIntersect = (entries: any, observer: any) => {
+    entries.forEach((entry: any) => {
+      if (entry.isIntersecting) {
+        const intersectingTopicName = entry.target.id.replace("topic--", "");
+        const currentDisplayedTopic = document.querySelector(
+          ".text-window .old-text",
+        );
+        const currentDisplayedPageNumber = document.querySelector(
+          ".page-number-window .old-text",
+        );
+        const currentDisplayedTopicName = currentDisplayedTopic?.id.replace(
+          "topic-header--",
+          "",
+        );
+
+        // If the current displayed topic name is the same as the one in view, do nothing
+        if (currentDisplayedTopicName === intersectingTopicName) {
+          console.log("No change needed, same topic in view.");
+          return;
+        }
+
+        // If the current displayed topic is different from the one in view
+        if (
+          currentDisplayedTopic &&
+          currentDisplayedPageNumber &&
+          textWindow &&
+          pageNumberWindow
+        ) {
+          // Add "animate-swap" class to textWindow and pageNumberWindow
+          textWindow.classList.add("animate-swap");
+          pageNumberWindow.classList.add("animate-swap");
+
+          // Once the animation is done, swap the old and new text
+          setTimeout(() => {
+            currentDisplayedTopic.classList.remove("old-text");
+            currentDisplayedTopic.classList.add("new-text");
+            currentDisplayedPageNumber.classList.remove("old-text");
+            currentDisplayedPageNumber.classList.add("new-text");
+
+            const newText = document.getElementById(
+              `topic-header--${intersectingTopicName}`,
+            );
+            const newPageNumber = document.getElementById(
+              `page-number--${intersectingTopicName}`,
+            );
+            if (newText && newPageNumber) {
+              newText.classList.remove("new-text");
+              newText.classList.add("old-text");
+              newPageNumber.classList.remove("new-text");
+              newPageNumber.classList.add("old-text");
+            }
+
+            // Remove the animate-swap class after the animation is done
+            textWindow.classList.remove("animate-swap");
+            pageNumberWindow.classList.remove("animate-swap");
+          }, 2000); // Match this duration with your CSS animation duration
+        }
+      }
+    });
+  };
+
+  const createObserver = () => {
+    let observer;
+
+    let options = {
+      root: null,
+      rootMargin: "10% 0px -65% 0px",
+      threshold: 1,
+    };
+
+    observer = new IntersectionObserver(handleIntersect, options);
+    topics.forEach((topic) => {
+      observer.observe(topic);
+    });
+  };
+
+  createObserver();
+</script>
+
+<style>
+  .old-text span,
+  .new-text span {
+    display: inline-block;
+  }
+
+  .old-text span {
+    opacity: 1;
+  }
+
+  .new-text span {
+    opacity: 0;
+  }
+
+  .animate-swap .old-text span {
+    animation: slideOutUp 2s forwards;
+    animation-delay: calc(0.05s * var(--index));
+  }
+
+  .animate-swap .new-text span {
+    animation: slideInUp 2s forwards;
+    animation-delay: calc(0.05s * var(--index));
+  }
+
+  @keyframes slideOutUp {
+    0% {
+      transform: translateY(0);
+      opacity: 1;
+    }
+    100% {
+      transform: translateY(-100%);
+      opacity: 0;
+    }
+  }
+
+  @keyframes slideInUp {
+    0% {
+      transform: translateY(100%);
+      opacity: 0;
+    }
+    100% {
+      transform: translateY(0);
+      opacity: 1;
+    }
+  }
+</style>
