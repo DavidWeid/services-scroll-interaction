@@ -1,60 +1,149 @@
 ---
 import Layout from "@layouts/Layout.astro";
 import Nav from "@components/Nav.astro";
-import PlusIcon from "@assets/plus.svg";
+import Details from "@/layouts/Details.astro";
+
+const frontmatter = {
+  title: "Homepage",
+  description:
+    "Welcome to our homepage! Discover our services and how we can help you.",
+};
+
+const mainContent = {
+  frontend: {
+    topicPrefix: "Front",
+    title: "Front End Services",
+    items: [
+      {
+        title: "Creative development",
+        description:
+          "We create beautiful, functional, and engaging websites that captivate users and drive results. Our team of experts combines creativity with technical expertise to deliver exceptional web experiences.",
+      },
+      {
+        title: "Animation",
+        description:
+          "Our animation services bring your website to life, adding dynamic elements that enhance user engagement. From subtle transitions to eye-catching effects, we create animations that complement your brand and captivate your audience.",
+      },
+      {
+        title: "Landing pages",
+        description:
+          "We design and develop high-converting landing pages that drive traffic and generate leads. Our landing pages are optimized for performance, ensuring a seamless user experience that encourages conversions.",
+      },
+      {
+        title: "Performance optimization",
+        description:
+          "We optimize your website for speed and performance, ensuring fast load times and smooth interactions. Our performance optimization services enhance user experience and improve search engine rankings.",
+      },
+      {
+        title: "Accessibility",
+        description:
+          "We ensure your website is accessible to all users, including those with disabilities. Our accessibility services comply with WCAG standards, making your website inclusive and user-friendly for everyone.",
+      },
+      {
+        title: "Responsive design",
+        description:
+          "We create responsive designs that adapt seamlessly to different devices and screen sizes. Our responsive design services ensure your website looks great and functions flawlessly on desktops, tablets, and smartphones.",
+      },
+      {
+        title: "Web development",
+        description:
+          "We provide comprehensive web development services, from front-end to back-end. Our team builds robust, scalable, and secure websites that meet your business needs and exceed user expectations.",
+      },
+    ],
+  },
+  backend: {
+    topicPrefix: "Back",
+    title: "Back End Services",
+    items: [
+      {
+        title: "API development",
+        description:
+          "We develop robust APIs that enable seamless communication between your website and external services. Our API development services ensure your website can integrate with third-party applications and platforms.",
+      },
+      {
+        title: "Database management",
+        description:
+          "We provide database management services to ensure your website's data is organized, secure, and easily accessible. Our team optimizes database performance and implements best practices for data integrity.",
+      },
+      {
+        title: "Server-side scripting",
+        description:
+          "We create dynamic, server-side scripts that enhance your website's functionality. Our server-side scripting services enable complex interactions and data processing, delivering a rich user experience.",
+      },
+      {
+        title: "Security",
+        description:
+          "We implement robust security measures to protect your website from threats and vulnerabilities. Our security services include regular audits, vulnerability assessments, and proactive monitoring.",
+      },
+      {
+        title: "Content management systems (CMS)",
+        description:
+          "We develop and customize content management systems to empower you to manage your website's content easily. Our CMS solutions are user-friendly and scalable, allowing you to grow your online presence effortlessly.",
+      },
+      {
+        title: "E-commerce solutions",
+        description:
+          "We build secure and scalable e-commerce solutions that drive sales and enhance customer experience. Our e-commerce services include payment gateway integration, product management, and order processing.",
+      },
+      {
+        title: "Cloud services",
+        description:
+          "We offer cloud services to ensure your website is scalable, reliable, and cost-effective. Our cloud solutions include hosting, storage, and computing resources tailored to your business needs.",
+      },
+    ],
+  },
+};
+
+// Calculate the distance from the top of the page to the sticky first column (nav height + section padding)
+const distanceFromTop = `${65 + 80}px`;
 ---
 
-<Layout>
+<Layout title={frontmatter.title} description={frontmatter.description}>
   <Nav />
-  <main class="grow container py-10 grid grid-cols-2 gap-10">
+  <!-- Two columns: First one has title/pagination and is sticky -->
+  <main class="grow container py-20 grid grid-cols-1 tablet:grid-cols-2 gap-10">
     <div
-      class="sticky top-0 h-[calc(100vh_-_105px)] pt-[105px] -mt-[105px] flex flex-col justify-between"
+      class={`sticky top-0 h-[calc(100vh_-_${distanceFromTop})] pt-[${distanceFromTop}] -mt-[${distanceFromTop}] flex flex-col justify-between`}
     >
-      <h1 class="font-extrabold uppercase text-9xl leading-28">
-        <span id="active-topic">Front</span><br />End
+      <h1
+        class="font-extrabold uppercase text-7xl laptop:text-9xl laptop:leading-28"
+      >
+        {
+          Object.entries(mainContent).map(([key, content]) => (
+            <span id={`topic-header--${key}`}>{content.topicPrefix}</span>
+          ))
+        }
+        <br />End
       </h1>
 
-      <p class="font-extrabold text-9xl leading-28">01</p>
+      <p class="font-extrabold text-9xl leading-28">
+        <span id="active-page">01</span>
+      </p>
     </div>
 
-    <div style="height:200vh;">
-      <h2 class="text-lg pb-4 border-b-2 border-gray-300">
-        Front End Services
-      </h2>
-      <details
-        name="frontend"
-        class="border-b-2 border-gray-300 open:[&_.plus-icon]:rotate-45 [&_.plus-icon]:transform [&_.plus-icon]:duration-500"
-      >
-        <summary
-          class="py-6 cursor-pointer flex items-center justify-between w-full font-medium"
-          >Creative development<PlusIcon
-            class="plus-icon w-5 h-5 fill-gray-600"
-          /></summary
-        >
-        <p class="pb-6">
-          We create beautiful, functional, and engaging websites that captivate
-          users and drive results. Our team of experts combines creativity with
-          technical expertise to deliver exceptional web experiences.
-        </p>
-      </details>
+    <!-- Second column: Content for the page -->
+    <div>
+      {
+        Object.entries(mainContent).map(([name, content], index) => (
+          <>
+            <h2
+              id={`topic--${name}`}
+              class={`text-lg ${index > 0 ? "pt-40" : ""} pb-5 border-b-2 border-gray-300`}
+            >
+              {content.title}
+            </h2>
+            {content.items.map((item) => (
+              <Details
+                name={name}
+                title={item.title}
+                description={item.description}
+              />
+            ))}
+          </>
+        ))
+      }
 
-      <details
-        name="frontend"
-        class="border-b-2 border-gray-300 open:[&_.plus-icon]:rotate-45 [&_.plus-icon]:transform [&_.plus-icon]:duration-500"
-      >
-        <summary
-          class="py-6 cursor-pointer flex items-center justify-between w-full font-medium"
-          >Animation<PlusIcon
-            class="plus-icon w-5 h-5 fill-gray-600"
-          /></summary
-        >
-        <p class="pb-6">
-          Our animation services bring your website to life, adding dynamic
-          elements that enhance user engagement. From subtle transitions to
-          eye-catching effects, we create animations that complement your brand
-          and captivate your audience.
-        </p>
-      </details>
+      <span class="block pb-80"></span>
     </div>
   </main>
 </Layout>

@@ -1,5 +1,12 @@
 ---
 import "../styles/styles.css";
+
+interface Props {
+  title?: string;
+  description?: string;
+}
+
+const { title, description }: Props = Astro.props;
 ---
 
 <!doctype html>
