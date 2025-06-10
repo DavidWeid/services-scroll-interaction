@@ -1,4 +1,20 @@
-# Web Developer take-home
+# Web Developer Take Home
+
+This project is created from the inspiration provided using HTML, CSS, and Javascript. Additionally, it uses TailwindCSS and AstroJS for scaffolding. Here are some of the things considered during build:
+
+- Components and templates: There are two components: `Nav` and `Details`, and there is one template `Layout` that's used by the page (`index`)
+  - `index.astro` has `script` and `style` blocks, which is acceptable practice with AstroJS due to how the framework scopes and proccesses these. In a different setting, these could be moved out into separate places as needed
+- Accessibility and semantic HTML considerations
+  - There are native elements where possible: `nav`, `main`, `section`, `details` with `summary`
+  - You can tab through interactive elements (nav items and details)
+  - The page has 1 `h1` with an `aria-label` because the content of the `h1` is split into `span` encased characters for the animated effect
+  - The page has 2 `h2` elements for each main section ("Front End Services" and "Back End Services")
+  - Animations are turned off if the user prefers reduced motion
+  - An blurred background was added to the main content to help with readability, especially with the background SVG
+- Performance and SEO
+  - In `Layout` we preload the 3 font files in use
+  - A meta title and description are passed into `Layout` for SEO
+  - Other SEO meta data is set (url, locale, site_name, type)
 
 ## Installation
 
@@ -19,8 +35,8 @@ npm run dev
 
 ## Future improvements
 
-_We recognize that building a beautiful and convincing website is not a
-simple or speedy task, which is why we'd like to see what future
-improvements you would suggest to get this project to a 100% production
-ready state. No suggestion is a bad one, and we welcome every detail you
-provide._
+- OG image
+- Host this on a domain (such as AWS Amplify or GitHub Pages, which is relatively simple)
+- Make it responsive (tablet and mobile devices)
+- Organize CSS and JS as needed - both could be removed from the `index.astro` file, but Astro scopes these to the component, which makes sense in this setting
+- Use Next.js next time

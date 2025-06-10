@@ -39,12 +39,41 @@
 }
 
 @layer base {
+  *::selection {
+    @apply bg-green-700 text-white;
+  }
+
   html {
-    @apply bg-gray-100 desktop:overscroll-none scroll-smooth font-sans;
+    @apply bg-gray-200 desktop:overscroll-none scroll-smooth font-sans font-normal;
   }
 
   a {
-    @apply transition-default hover:text-green-600;
+    background: linear-gradient(
+        to right,
+        theme("colors.gray.200"),
+        theme("colors.gray.200")
+      ),
+      linear-gradient(
+        to right,
+        theme("colors.green.700"),
+        theme("colors.green.600"),
+        theme("colors.green.500")
+      );
+    background-size: 100% 2px, 0 2px;
+    background-position: 100% 100%, 0 100%;
+    background-repeat: no-repeat;
+    transition: background-size 400ms;
+  }
+
+  a:hover {
+    background-size: 0 2px, 100% 2px;
+  }
+
+  @media (prefers-reduced-motion) {
+    a {
+      background-size: 0 2px, 100% 2px;
+      transition: none;
+    }
   }
 
   :root {
@@ -73,5 +102,27 @@
   details[open]::details-content {
     block-size: auto;
     opacity: 1;
+  }
+}
+
+/* Animate "path" elements of #background-svg svg element */
+@keyframes background-path-animation {
+  from {
+    stroke-dasharray: 0 1000;
+  }
+  to {
+    stroke-dasharray: 1000 0;
+  }
+}
+
+.background-svg {
+  animation: background-path-animation 10s linear infinite alternate;
+  stroke-dasharray: 1000 0;
+  stroke-dashoffset: 0;
+}
+
+@media (prefers-reduced-motion) {
+  .background-svg {
+    animation: none;
   }
 }
