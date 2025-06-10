@@ -236,7 +236,7 @@ const mainContent = {
             // Remove the animate-swap class after the animation is done
             textWindow.classList.remove("animate-swap");
             pageNumberWindow.classList.remove("animate-swap");
-          }, 2000); // Match this duration with your CSS animation duration
+          }, 1000); // Match this duration with your CSS animation duration
         }
       }
     });
@@ -275,12 +275,12 @@ const mainContent = {
   }
 
   .animate-swap .old-text span {
-    animation: slideOutUp 2s forwards;
+    animation: slideOutUp 1s forwards;
     animation-delay: calc(0.05s * var(--index));
   }
 
   .animate-swap .new-text span {
-    animation: slideInUp 2s forwards;
+    animation: slideInUp 1s forwards;
     animation-delay: calc(0.05s * var(--index));
   }
 

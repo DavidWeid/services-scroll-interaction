@@ -34,36 +34,44 @@
   }
 }
 
+@utility transition-default {
+  @apply transition-all duration-300 ease-in-out;
+}
+
 @layer base {
   html {
     @apply bg-gray-100 desktop:overscroll-none scroll-smooth font-sans;
   }
-}
 
-:root {
-  interpolate-size: allow-keywords;
-}
-
-summary::-webkit-details-marker {
-  @apply hidden;
-}
-
-details::details-content {
-  block-size: 0;
-  opacity: 0;
-  transition: block-size 1s ease, opacity 0.5s ease-in,
-    content-visibility 1s ease;
-  transition-behavior: allow-discrete;
-}
-
-@media (prefers-reduced-motion) {
-  details::details-content {
-    block-size: auto;
-    transition: none;
+  a {
+    @apply transition-default hover:text-green-600;
   }
-}
 
-details[open]::details-content {
-  block-size: auto;
-  opacity: 1;
+  :root {
+    interpolate-size: allow-keywords;
+  }
+
+  summary::-webkit-details-marker {
+    @apply hidden;
+  }
+
+  details::details-content {
+    block-size: 0;
+    opacity: 0;
+    transition: block-size 1s ease, opacity 0.5s ease-in,
+      content-visibility 1s ease;
+    transition-behavior: allow-discrete;
+  }
+
+  @media (prefers-reduced-motion) {
+    details::details-content {
+      block-size: auto;
+      transition: none;
+    }
+  }
+
+  details[open]::details-content {
+    block-size: auto;
+    opacity: 1;
+  }
 }
