@@ -1,9 +1,60 @@
 ---
-import Layout from "../layouts/Layout.astro";
-import Nav from "../components/Nav.astro";
+import Layout from "@layouts/Layout.astro";
+import Nav from "@components/Nav.astro";
+import PlusIcon from "@assets/plus.svg";
 ---
 
 <Layout>
   <Nav />
-  <h1>Hello</h1>
+  <main class="grow container py-10 grid grid-cols-2 gap-10">
+    <div
+      class="sticky top-0 h-[calc(100vh_-_105px)] pt-[105px] -mt-[105px] flex flex-col justify-between"
+    >
+      <h1 class="font-extrabold uppercase text-9xl leading-28">
+        <span id="active-topic">Front</span><br />End
+      </h1>
+
+      <p class="font-extrabold text-9xl leading-28">01</p>
+    </div>
+
+    <div style="height:200vh;">
+      <h2 class="text-lg pb-4 border-b-2 border-gray-300">
+        Front End Services
+      </h2>
+      <details
+        name="frontend"
+        class="border-b-2 border-gray-300 open:[&_.plus-icon]:rotate-45 [&_.plus-icon]:transform [&_.plus-icon]:duration-500"
+      >
+        <summary
+          class="py-6 cursor-pointer flex items-center justify-between w-full font-medium"
+          >Creative development<PlusIcon
+            class="plus-icon w-5 h-5 fill-gray-600"
+          /></summary
+        >
+        <p class="pb-6">
+          We create beautiful, functional, and engaging websites that captivate
+          users and drive results. Our team of experts combines creativity with
+          technical expertise to deliver exceptional web experiences.
+        </p>
+      </details>
+
+      <details
+        name="frontend"
+        class="border-b-2 border-gray-300 open:[&_.plus-icon]:rotate-45 [&_.plus-icon]:transform [&_.plus-icon]:duration-500"
+      >
+        <summary
+          class="py-6 cursor-pointer flex items-center justify-between w-full font-medium"
+          >Animation<PlusIcon
+            class="plus-icon w-5 h-5 fill-gray-600"
+          /></summary
+        >
+        <p class="pb-6">
+          Our animation services bring your website to life, adding dynamic
+          elements that enhance user engagement. From subtle transitions to
+          eye-catching effects, we create animations that complement your brand
+          and captivate your audience.
+        </p>
+      </details>
+    </div>
+  </main>
 </Layout>
