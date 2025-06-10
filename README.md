@@ -9,12 +9,13 @@ This project is created from the inspiration provided using HTML, CSS, and Javas
   - You can tab through interactive elements (nav items and details)
   - The page has 1 `h1` with an `aria-label` because the content of the `h1` is split into `span` encased characters for the animated effect
   - The page has 2 `h2` elements for each main section ("Front End Services" and "Back End Services")
-  - Animations are turned off if the user prefers reduced motion
+  - Animations are turned off if the user prefers reduced motion and the SVG animation is paused when the browser tab loses focus
   - An blurred background was added to the main content to help with readability, especially with the background SVG
 - Performance and SEO
   - In `Layout` we preload the 3 font files in use
   - A meta title and description are passed into `Layout` for SEO
   - Other SEO meta data is set (url, locale, site_name, type)
+- Animation: The main text animation is done through CSS and IntersectionObserver
 
 ## Installation
 
@@ -40,3 +41,9 @@ npm run dev
 - Make it responsive (tablet and mobile devices)
 - Organize CSS and JS as needed - both could be removed from the `index.astro` file, but Astro scopes these to the component, which makes sense in this setting
 - Use Next.js next time
+- Browser compatibility tests, performance tests
+- Analytics (such as Google Analytics)
+
+## Submission
+
+This project is located here: https://github.com/DavidWeid/services-scroll-interaction
