@@ -40,6 +40,7 @@ npm run dev
 - Host this on a domain (such as AWS Amplify or GitHub Pages, which is relatively simple)
 - Make it responsive (tablet and mobile devices)
 - Organize CSS and JS as needed - both could be removed from the `index.astro` file, but Astro scopes these to the component, which makes sense in this setting
+- Abstraction of page content data into a content file (more applicable for a larger site)
 - Use Next.js next time
 - Browser compatibility tests, performance tests
 - Analytics (such as Google Analytics)
