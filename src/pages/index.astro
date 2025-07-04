@@ -10,8 +10,8 @@ const frontmatter = {
     "Welcome to Services Scroll Interaction! Explore our front-end and back-end services with a unique scroll-based interaction that highlights our offerings dynamically.",
 };
 
-const mainContent = {
-  frontend: {
+const mainContent = [
+  {
     topicPrefix: "Front",
     title: "Front End Services",
     items: [
@@ -52,7 +52,7 @@ const mainContent = {
       },
     ],
   },
-  backend: {
+  {
     topicPrefix: "Back",
     title: "Back End Services",
     items: [
@@ -93,7 +93,48 @@ const mainContent = {
       },
     ],
   },
-};
+  {
+    topicPrefix: "Start-",
+    title: "End-to-End Services",
+    items: [
+      {
+        title: "API development",
+        description:
+          "We develop robust APIs that enable seamless communication between your website and external services. Our API development services ensure your website can integrate with third-party applications and platforms.",
+      },
+      {
+        title: "Database management",
+        description:
+          "We provide database management services to ensure your website's data is organized, secure, and easily accessible. Our team optimizes database performance and implements best practices for data integrity.",
+      },
+      {
+        title: "Server-side scripting",
+        description:
+          "We create dynamic, server-side scripts that enhance your website's functionality. Our server-side scripting services enable complex interactions and data processing, delivering a rich user experience.",
+      },
+      {
+        title: "Security",
+        description:
+          "We implement robust security measures to protect your website from threats and vulnerabilities. Our security services include regular audits, vulnerability assessments, and proactive monitoring.",
+      },
+      {
+        title: "Content management systems (CMS)",
+        description:
+          "We develop and customize content management systems to empower you to manage your website's content easily. Our CMS solutions are user-friendly and scalable, allowing you to grow your online presence effortlessly.",
+      },
+      {
+        title: "E-commerce solutions",
+        description:
+          "We build secure and scalable e-commerce solutions that drive sales and enhance customer experience. Our e-commerce services include payment gateway integration, product management, and order processing.",
+      },
+      {
+        title: "Cloud services",
+        description:
+          "We offer cloud services to ensure your website is scalable, reliable, and cost-effective. Our cloud solutions include hosting, storage, and computing resources tailored to your business needs.",
+      },
+    ],
+  },
+];
 ---
 
 <Layout title={frontmatter.title} description={frontmatter.description}>
@@ -104,7 +145,10 @@ const mainContent = {
   />
   <Nav />
   <!-- Two columns: First one has title/pagination and is sticky -->
-  <main id="main" class="grow container py-20 grid grid-cols-1 tablet:grid-cols-2 gap-10">
+  <main
+    id="main"
+    class="grow container py-20 grid grid-cols-1 tablet:grid-cols-2 gap-10"
+  >
     <!-- 145px is the distance from the top of the page to the sticky first column (nav height + section padding) -->
     <section
       class="sticky top-0 h-[calc(100vh_-_145px)] pt-[145px] -mt-[145px] flex flex-col justify-between"
@@ -116,10 +160,11 @@ const mainContent = {
         <!-- Will add "animate-swap" class dynamically based on intersection observer -->
         <div class="text-window relative overflow-hidden h-[120px]">
           {
-            Object.entries(mainContent).map(([key, content], index) => (
+            mainContent.map((content, index) => (
               <span
-                id={`topic-header--${key}`}
-                class={`absolute bottom-0 left-0 ${index === 0 ? "old-text" : "new-text"}`}
+                id={`topic-display--${index}`}
+                data-id={index}
+                class={`absolute bottom-0 left-0 ${index === 0 ? "active-text" : "inactive-text"}`}
               >
                 {[...content.topicPrefix].map(
                   (char: string, charIndex: number) => (
@@ -137,12 +182,13 @@ const mainContent = {
         class="page-number-window relative overflow-hidden h-[120px] font-extrabold uppercase text-7xl laptop:text-9xl laptop:leading-28"
       >
         {
-          Object.entries(mainContent).map(([key], index) => {
+          mainContent.map((content, index) => {
             const pageNum = (index + 1).toString().padStart(2, "0");
             return (
               <span
-                id={`page-number--${key}`}
-                class={`absolute bottom-0 left-0 ${index === 0 ? "old-text" : "new-text"}`}
+                id={`page-number--${index}`}
+                data-id={index}
+                class={`absolute bottom-0 left-0 ${index === 0 ? "active-text" : "inactive-text"}`}
               >
                 {[...pageNum].map((char: string, charIndex: number) => (
                   <span style={{ "--index": charIndex }}>{char}</span>
@@ -157,17 +203,18 @@ const mainContent = {
     <!-- Second column: Content for the page -->
     <section class="p-10 rounded-3xl backdrop-blur-md bg-gray-300/25">
       {
-        Object.entries(mainContent).map(([name, content], index) => (
+        mainContent.map((content, index) => (
           <>
             <h2
-              id={`topic--${name}`}
+              id={`topic-header--${index}`}
+              data-id={index}
               class={`text-lg ${index > 0 ? "pt-40" : ""} pb-5 border-b-2 border-gray-300`}
             >
               {content.title}
             </h2>
             {content.items.map((item) => (
               <Details
-                name={name}
+                name={content.title}
                 title={item.title}
                 description={item.description}
               />
@@ -182,62 +229,57 @@ const mainContent = {
 </Layout>
 
 <script>
-  // On scroll, if the "#topic--<name>" element is in view, update the active page number and add the animate-swap class to "text-window"
-  const topics = document.querySelectorAll("[id^='topic--']");
+  // On scroll, if the "#topic-header--<index>" element is in view, update the active page number and add the animate-swap class to "text-window"
+  const topicHeaders = document.querySelectorAll("[id^='topic-header--']");
+  const displayTexts = document.querySelectorAll("[id^='topic-display--']");
+  const displayNumbers = document.querySelectorAll("[id^='page-number--']");
   const textWindow = document.querySelector(".text-window");
   const pageNumberWindow = document.querySelector(".page-number-window");
 
   const handleIntersect = (entries: any, observer: any) => {
     entries.forEach((entry: any) => {
-      if (entry.isIntersecting) {
-        const intersectingTopicName = entry.target.id.replace("topic--", "");
-        const currentDisplayedTopic = document.querySelector(
-          ".text-window .old-text",
-        );
-        const currentDisplayedPageNumber = document.querySelector(
-          ".page-number-window .old-text",
-        );
-        const currentDisplayedTopicName = currentDisplayedTopic?.id.replace(
-          "topic-header--",
-          "",
-        );
+      const activeDisplay = textWindow?.querySelector(".active-text");
+      const activePageNumber = pageNumberWindow?.querySelector(".active-text");
+      const activeIndex = activeDisplay?.getAttribute("data-id");
 
-        // If the current displayed topic name is the same as the one in view, do nothing
-        if (currentDisplayedTopicName === intersectingTopicName) {
+      if (entry.isIntersecting) {
+        const intersectingElement = entry.target;
+        const intersectingIndex = intersectingElement.getAttribute("data-id");
+
+        // If the current displayed index is the same as the one in view, do nothing
+        if (activeIndex === intersectingIndex) {
           console.log("No change needed, same topic in view.");
           return;
         }
 
-        // If the current displayed topic is different from the one in view
+        // If the current displayed index is different from the one in view
         if (
-          currentDisplayedTopic &&
-          currentDisplayedPageNumber &&
           textWindow &&
-          pageNumberWindow
+          pageNumberWindow &&
+          activeDisplay &&
+          activePageNumber
         ) {
           // Add "animate-swap" class to textWindow and pageNumberWindow
+          displayTexts[intersectingIndex].classList.add("activate");
+          displayNumbers[intersectingIndex].classList.add("activate");
           textWindow.classList.add("animate-swap");
           pageNumberWindow.classList.add("animate-swap");
 
           // Once the animation is done, swap the old and new text
           setTimeout(() => {
-            currentDisplayedTopic.classList.remove("old-text");
-            currentDisplayedTopic.classList.add("new-text");
-            currentDisplayedPageNumber.classList.remove("old-text");
-            currentDisplayedPageNumber.classList.add("new-text");
+            activeDisplay.classList.replace("active-text", "inactive-text");
+            activePageNumber.classList.replace("active-text", "inactive-text");
 
-            const newText = document.getElementById(
-              `topic-header--${intersectingTopicName}`,
+            displayTexts[intersectingIndex].classList.replace(
+              "inactive-text",
+              "active-text",
             );
-            const newPageNumber = document.getElementById(
-              `page-number--${intersectingTopicName}`,
+            displayTexts[intersectingIndex].classList.remove("activate");
+            displayNumbers[intersectingIndex].classList.replace(
+              "inactive-text",
+              "active-text",
             );
-            if (newText && newPageNumber) {
-              newText.classList.remove("new-text");
-              newText.classList.add("old-text");
-              newPageNumber.classList.remove("new-text");
-              newPageNumber.classList.add("old-text");
-            }
+            displayNumbers[intersectingIndex].classList.remove("activate");
 
             // Remove the animate-swap class after the animation is done
             textWindow.classList.remove("animate-swap");
@@ -258,8 +300,8 @@ const mainContent = {
     };
 
     observer = new IntersectionObserver(handleIntersect, options);
-    topics.forEach((topic) => {
-      observer.observe(topic);
+    topicHeaders.forEach((header) => {
+      observer.observe(header);
     });
   };
 
@@ -285,25 +327,25 @@ const mainContent = {
 </script>
 
 <style>
-  .old-text span,
-  .new-text span {
+  .active-text span,
+  .inactive-text span {
     display: inline-block;
   }
 
-  .old-text span {
+  .active-text span {
     opacity: 1;
   }
 
-  .new-text span {
+  .inactive-text span {
     opacity: 0;
   }
 
-  .animate-swap .old-text span {
+  .animate-swap .active-text span {
     animation: slideOutUp 1s forwards;
     animation-delay: calc(0.05s * var(--index));
   }
 
-  .animate-swap .new-text span {
+  .animate-swap .inactive-text.activate span {
     animation: slideInUp 1s forwards;
     animation-delay: calc(0.05s * var(--index));
   }
@@ -331,8 +373,8 @@ const mainContent = {
   }
 
   @media (prefers-reduced-motion) {
-    .animate-swap .old-text span,
-    .animate-swap .new-text span {
+    .animate-swap .active-text span,
+    .animate-swap .inactive-text.activate span {
       animation: none;
       animation-delay: 0;
     }
