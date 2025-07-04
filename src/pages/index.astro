@@ -104,7 +104,7 @@ const mainContent = {
   />
   <Nav />
   <!-- Two columns: First one has title/pagination and is sticky -->
-  <main class="grow container py-20 grid grid-cols-1 tablet:grid-cols-2 gap-10">
+  <main id="main" class="grow container py-20 grid grid-cols-1 tablet:grid-cols-2 gap-10">
     <!-- 145px is the distance from the top of the page to the sticky first column (nav height + section padding) -->
     <section
       class="sticky top-0 h-[calc(100vh_-_145px)] pt-[145px] -mt-[145px] flex flex-col justify-between"
@@ -327,6 +327,14 @@ const mainContent = {
     100% {
       transform: translateY(0);
       opacity: 1;
+    }
+  }
+
+  @media (prefers-reduced-motion) {
+    .animate-swap .old-text span,
+    .animate-swap .new-text span {
+      animation: none;
+      animation-delay: 0;
     }
   }
 </style>

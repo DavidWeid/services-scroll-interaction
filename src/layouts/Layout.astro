@@ -58,6 +58,11 @@ const urlString: string = new URL(Astro.request.url).href;
     <meta name="twitter:description" content={description} />
   </head>
   <body class="relative flex flex-col justify-between min-h-screen">
+    <a
+      href="#main"
+      class="fixed -top-10 focus:top-0 z-50 w-max self-center px-2 py-1 transition-default"
+      >Skip to main content</a
+    >
     <slot />
   </body>
 </html>
