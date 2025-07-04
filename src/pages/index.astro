@@ -239,15 +239,17 @@ const mainContent = [
   let animationTimeout: ReturnType<typeof setTimeout> | null = null;
   let isAnimating = false;
 
-  const handleIntersect = (entries: any, observer: any) => {
-    entries.forEach((entry: any) => {
+  const handleIntersect = (entries: IntersectionObserverEntry[]) => {
+    entries.forEach((entry: IntersectionObserverEntry) => {
       const activeDisplay = textWindow?.querySelector(".active-text");
       const activePageNumber = pageNumberWindow?.querySelector(".active-text");
-      const activeIndex = activeDisplay?.getAttribute("data-id");
+      const activeIndex = Number(activeDisplay?.getAttribute("data-id"));
 
       if (entry.isIntersecting) {
         const intersectingElement = entry.target;
-        const intersectingIndex = intersectingElement.getAttribute("data-id");
+        const intersectingIndex = Number(
+          intersectingElement.getAttribute("data-id"),
+        );
 
         // If the current displayed index is the same as the one in view, do nothing
         if (activeIndex === intersectingIndex) {
