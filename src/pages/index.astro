@@ -236,6 +236,9 @@ const mainContent = [
   const textWindow = document.querySelector(".text-window");
   const pageNumberWindow = document.querySelector(".page-number-window");
 
+  let animationTimeout: ReturnType<typeof setTimeout> | null = null;
+  let isAnimating = false;
+
   const handleIntersect = (entries: any, observer: any) => {
     entries.forEach((entry: any) => {
       const activeDisplay = textWindow?.querySelector(".active-text");
@@ -252,6 +255,22 @@ const mainContent = [
           return;
         }
 
+        // Cancel any pending animation
+        if (animationTimeout) {
+          clearTimeout(animationTimeout);
+          animationTimeout = null;
+        }
+
+        // If already animating, immediately complete the current animation
+        if (isAnimating) {
+          textWindow?.classList.remove("animate-swap");
+          pageNumberWindow?.classList.remove("animate-swap");
+
+          // Clean up any pending activate classes
+          displayTexts.forEach((text) => text.classList.remove("activate"));
+          displayNumbers.forEach((num) => num.classList.remove("activate"));
+        }
+
         // If the current displayed index is different from the one in view
         if (
           textWindow &&
@@ -259,6 +278,8 @@ const mainContent = [
           activeDisplay &&
           activePageNumber
         ) {
+          isAnimating = true;
+
           // Add "animate-swap" class to textWindow and pageNumberWindow
           displayTexts[intersectingIndex].classList.add("activate");
           displayNumbers[intersectingIndex].classList.add("activate");
@@ -266,7 +287,7 @@ const mainContent = [
           pageNumberWindow.classList.add("animate-swap");
 
           // Once the animation is done, swap the old and new text
-          setTimeout(() => {
+          animationTimeout = setTimeout(() => {
             activeDisplay.classList.replace("active-text", "inactive-text");
             activePageNumber.classList.replace("active-text", "inactive-text");
 
@@ -284,6 +305,9 @@ const mainContent = [
             // Remove the animate-swap class after the animation is done
             textWindow.classList.remove("animate-swap");
             pageNumberWindow.classList.remove("animate-swap");
+
+            isAnimating = false;
+            animationTimeout = null;
           }, 1000); // Match this duration with your CSS animation duration
         }
       }
