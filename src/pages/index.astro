@@ -5,7 +5,7 @@ import Details from "@components/Details.astro";
 import BackgroundPattern from "@assets/background.svg";
 
 const frontmatter = {
-  title: "Homepage | Services Scroll Interaction",
+  title: "Services Scroll Interaction | Home",
   description:
     "Welcome to Services Scroll Interaction! Explore our front-end and back-end services with a unique scroll-based interaction that highlights our offerings dynamically.",
 };
@@ -95,7 +95,7 @@ const mainContent = [
   },
   {
     topicPrefix: "Start-",
-    title: "End-to-End Services",
+    title: "Start-to-End Services",
     items: [
       {
         title: "API development",
@@ -147,18 +147,20 @@ const mainContent = [
   <!-- Two columns: First one has title/pagination and is sticky -->
   <main
     id="main"
-    class="grow container py-20 grid grid-cols-1 tablet:grid-cols-2 gap-10"
+    class="grow container laptop:py-20 laptop:grid laptop:grid-cols-2 laptop:gap-10"
   >
     <!-- 145px is the distance from the top of the page to the sticky first column (nav height + section padding) -->
     <section
-      class="sticky top-0 h-[calc(100vh_-_145px)] pt-[145px] -mt-[145px] flex flex-col justify-between"
+      class="z-10 bg-gray-200 laptop:bg-transparent pb-5 laptop:pb-0 border-b border-b-gray-300 laptop:border-none sticky top-0 h-max laptop:h-[calc(100vh_-_145px)] pt-[65px] -mt-[65px] laptop:pt-[145px] laptop:-mt-[145px] flex laptop:flex-col justify-between"
     >
       <h1
-        class="font-extrabold uppercase text-7xl laptop:text-9xl laptop:leading-28 flex flex-col gap-4"
+        class="font-extrabold uppercase text-5xl tablet:text-7xl laptop:text-8xl desktop:text-9xl laptop:leading-28 flex flex-col gap-4 w-3/4 laptop:w-auto"
         aria-label="Front End and Back End Services"
       >
         <!-- Will add "animate-swap" class dynamically based on intersection observer -->
-        <div class="text-window relative overflow-hidden h-[120px]">
+        <div
+          class="text-window relative overflow-hidden h-[60px] tablet:h-[120px] w-full"
+        >
           {
             mainContent.map((content, index) => (
               <span
@@ -179,7 +181,7 @@ const mainContent = [
       </h1>
 
       <div
-        class="page-number-window relative overflow-hidden h-[120px] font-extrabold uppercase text-7xl laptop:text-9xl laptop:leading-28"
+        class="page-number-window relative overflow-hidden h-[60px] tablet:h-[120px] font-extrabold uppercase text-5xl tablet:text-7xl laptop:text-8xl desktop:text-9xl laptop:leading-28 w-1/4 laptop:w-auto"
       >
         {
           mainContent.map((content, index) => {
@@ -188,7 +190,7 @@ const mainContent = [
               <span
                 id={`page-number--${index}`}
                 data-id={index}
-                class={`absolute bottom-0 left-0 ${index === 0 ? "active-text" : "inactive-text"}`}
+                class={`absolute bottom-0 right-0 laptop:left-0 ${index === 0 ? "active-text" : "inactive-text"}`}
               >
                 {[...pageNum].map((char: string, charIndex: number) => (
                   <span style={{ "--index": charIndex }}>{char}</span>
@@ -201,14 +203,16 @@ const mainContent = [
     </section>
 
     <!-- Second column: Content for the page -->
-    <section class="p-10 rounded-3xl backdrop-blur-md bg-gray-300/25">
+    <section
+      class="mt-10 laptop:mt-0 py-10 px-4 rounded-none tablet:p-10 tablet:rounded-3xl backdrop-blur-md bg-gray-300/25"
+    >
       {
         mainContent.map((content, index) => (
           <>
             <h2
               id={`topic-header--${index}`}
               data-id={index}
-              class={`text-lg ${index > 0 ? "pt-40" : ""} pb-5 border-b-2 border-gray-300`}
+              class={`text-lg ${index > 0 ? "pt-24 laptop:pt-40" : ""} pb-5 border-b-2 border-gray-300`}
             >
               {content.title}
             </h2>
@@ -321,7 +325,7 @@ const mainContent = [
 
     let options = {
       root: null,
-      rootMargin: "10% 0px -65% 0px",
+      rootMargin: "10% 0px -50% 0px",
       threshold: 1,
     };
 
