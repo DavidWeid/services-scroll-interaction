@@ -43,6 +43,10 @@
     @apply bg-green-700 text-white;
   }
 
+  *:focus-visible {
+    @apply outline-green-700;
+  }
+
   html {
     @apply bg-gray-200 desktop:overscroll-none scroll-smooth font-sans font-normal;
   }
