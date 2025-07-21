@@ -1,6 +1,6 @@
-# Web Developer Take Home
+# Scroll Animations Testing Ground
 
-This project is created from the inspiration provided using HTML, CSS, and Javascript. Additionally, it uses TailwindCSS and AstroJS for scaffolding. Here are some of the things considered during build:
+This project is created from a video inspiration using HTML, CSS, and Javascript. Additionally, it uses TailwindCSS and AstroJS for scaffolding. Here are some of the things considered during build:
 
 - Components and templates: There are two components: `Nav` and `Details`, and there is one template `Layout` that's used by the page (`index`)
   - `index.astro` has `script` and `style` blocks, which is acceptable practice with AstroJS due to how the framework scopes and proccesses these. In a different setting, these could be moved out into separate places as needed
@@ -19,7 +19,7 @@ This project is created from the inspiration provided using HTML, CSS, and Javas
 
 ## Installation
 
-To setup this project and install it's tools/dependencies, if any, run the
+To setup this project and install it's tools/dependencies run the
 following command(s):
 
 ```
@@ -41,10 +41,5 @@ npm run dev
 - Make it responsive (tablet and mobile devices)
 - Organize CSS and JS as needed - both could be removed from the `index.astro` file, but Astro scopes these to the component, which makes sense in this setting
 - Abstraction of page content data into a content file (more applicable for a larger site)
-- Use Next.js next time
 - Browser compatibility tests, performance tests
 - Analytics (such as Google Analytics)
-
-## Submission
-
-This project is located here: https://github.com/DavidWeid/services-scroll-interaction
